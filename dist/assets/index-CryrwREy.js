@@ -1,0 +1,1 @@
+import{j as e}from"./index-CZ-S6stI.js";const n=function(){return e.jsx("main",{className:"mt-8",children:e.jsxs("div",{className:"flex flex-col gap-4 items-center justify-center",children:[e.jsx("h1",{className:"text-2xl font-bold",children:"Vite + React"}),e.jsx("p",{className:"text-sm",children:"And some other stuff"})]})})};export{n as component};
