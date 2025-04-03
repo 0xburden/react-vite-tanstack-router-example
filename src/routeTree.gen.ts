@@ -13,6 +13,8 @@
 import { Route as rootRoute } from './routes/__root'
 import { Route as OtherImport } from './routes/other'
 import { Route as IndexImport } from './routes/index'
+import { Route as CatsIndexImport } from './routes/cats.index'
+import { Route as CatsSplatImport } from './routes/cats.$'
 
 // Create/Update Routes
 
@@ -25,6 +27,18 @@ const OtherRoute = OtherImport.update({
 const IndexRoute = IndexImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const CatsIndexRoute = CatsIndexImport.update({
+  id: '/cats/',
+  path: '/cats/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const CatsSplatRoute = CatsSplatImport.update({
+  id: '/cats/$',
+  path: '/cats/$',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -46,6 +60,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OtherImport
       parentRoute: typeof rootRoute
     }
+    '/cats/$': {
+      id: '/cats/$'
+      path: '/cats/$'
+      fullPath: '/cats/$'
+      preLoaderRoute: typeof CatsSplatImport
+      parentRoute: typeof rootRoute
+    }
+    '/cats/': {
+      id: '/cats/'
+      path: '/cats'
+      fullPath: '/cats'
+      preLoaderRoute: typeof CatsIndexImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
@@ -54,36 +82,46 @@ declare module '@tanstack/react-router' {
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/other': typeof OtherRoute
+  '/cats/$': typeof CatsSplatRoute
+  '/cats': typeof CatsIndexRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/other': typeof OtherRoute
+  '/cats/$': typeof CatsSplatRoute
+  '/cats': typeof CatsIndexRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
   '/other': typeof OtherRoute
+  '/cats/$': typeof CatsSplatRoute
+  '/cats/': typeof CatsIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/other'
+  fullPaths: '/' | '/other' | '/cats/$' | '/cats'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/other'
-  id: '__root__' | '/' | '/other'
+  to: '/' | '/other' | '/cats/$' | '/cats'
+  id: '__root__' | '/' | '/other' | '/cats/$' | '/cats/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   OtherRoute: typeof OtherRoute
+  CatsSplatRoute: typeof CatsSplatRoute
+  CatsIndexRoute: typeof CatsIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   OtherRoute: OtherRoute,
+  CatsSplatRoute: CatsSplatRoute,
+  CatsIndexRoute: CatsIndexRoute,
 }
 
 export const routeTree = rootRoute
@@ -97,7 +135,9 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/other"
+        "/other",
+        "/cats/$",
+        "/cats/"
       ]
     },
     "/": {
@@ -105,6 +145,12 @@ export const routeTree = rootRoute
     },
     "/other": {
       "filePath": "other.tsx"
+    },
+    "/cats/$": {
+      "filePath": "cats.$.tsx"
+    },
+    "/cats/": {
+      "filePath": "cats.index.tsx"
     }
   }
 }
